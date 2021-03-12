@@ -659,28 +659,21 @@ namespace Project_FinchControl
         static int LightAlarmSetTimeToMonitor()
         {
             int timeToMonitor;
-            string input;
+            bool input;
 
             DisplayScreenHeader("Time to Monitor");
 
             
             Console.Write("Time to Monitor");
-            input = Console.ReadLine();
+            input = int.TryParse(Console.ReadLine(), out timeToMonitor);
 
-            if (!int.TryParse(input, out timeToMonitor))
+            if (!input == true)
             {
-                Console.WriteLine("invalid time to monitor, please enter a integer {0}");
-                Console.WriteLine();
-                Console.Write("Time to Monitor");
+                Console.WriteLine("Enter Time to Monitor");
                 int.TryParse(Console.ReadLine(), out timeToMonitor);
-                Console.WriteLine("\tPress any key to continue.");
-                Console.ReadKey();
+
             }
-            else
-            {
-               Console.WriteLine("Time to monitor");
-               int.TryParse(Console.ReadLine(), out timeToMonitor);
-            }
+            
 
             DisplayMenuPrompt("Light Alarm");
 
@@ -689,7 +682,7 @@ namespace Project_FinchControl
         static int LightAlarmSetMinMaxThresholdValue(string rangeType, Finch finchRobot)
         {
             int minMaxThresholdValue;
-            string input;
+            bool input;
 
             DisplayScreenHeader("Minimum/Maximum Threshold Value");
 
@@ -699,22 +692,16 @@ namespace Project_FinchControl
             
             //validate
             Console.Write("Enter the {} light sensor value:");
-            input = Console.ReadLine();
-            if (!int.TryParse(input, out minMaxThresholdValue))
+            input = int.TryParse(Console.ReadLine(), out minMaxThresholdValue);
+            if (!input == true)
             {
-                Console.WriteLine("enter minimum/maximum value.");
-                Console.WriteLine();
-                Console.Write("Time to Monitor");
+                Console.WriteLine("enter light sensor value.");
                 int.TryParse(Console.ReadLine(), out minMaxThresholdValue);
-                Console.WriteLine("\tPress any key to continue.");
-                Console.ReadKey();
+                
             }
-            else
-            {
-                Console.WriteLine("Enter the {} light sensor value:");
-                int.TryParse(Console.ReadLine(), out minMaxThresholdValue);
-            }
+            
             //echo
+
             DisplayMenuPrompt("Light Alarm");
 
             return minMaxThresholdValue;
@@ -732,9 +719,8 @@ namespace Project_FinchControl
             if (sensorsToMonitor != "left" && sensorsToMonitor != "right" && sensorsToMonitor != "both")
             {
                 Console.WriteLine("invalid sensors to monitor, please enter left or right or both.");
-                Console.WriteLine();
-                Console.WriteLine("\tPress any key to continue.");
-                Console.ReadKey();
+                Console.ReadLine();
+                
             }
             
            
@@ -754,9 +740,7 @@ namespace Project_FinchControl
             if (rangeType != "minimum" && rangeType != "maximum")
             {
                 Console.WriteLine("invalid range type, please enter minimum or maximum.");
-                Console.WriteLine();
-                Console.WriteLine("\tPress any key to continue.");
-                Console.ReadKey();
+                Console.ReadLine();
             }
 
             DisplayMenuPrompt("Light Alarm");
