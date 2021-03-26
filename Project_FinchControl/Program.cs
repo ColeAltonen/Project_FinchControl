@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using FinchAPI;
 
+
 namespace Project_FinchControl
 {
     /// <summary>
@@ -87,7 +88,8 @@ namespace Project_FinchControl
                 Console.WriteLine("\tc) Data Recorder");
                 Console.WriteLine("\td) Light Alarm System");
                 Console.WriteLine("\te) User Programming");
-                Console.WriteLine("\tf) Disconnect Finch Robot");
+                Console.WriteLine("\tf) Set Theme");
+                Console.WriteLine("\tg) Disconnect Finch Robot");
                 Console.WriteLine("\tq) Quit");
                 Console.Write("\t\tEnter Choice:");
                 menuChoice = Console.ReadLine().ToLower();
@@ -118,8 +120,14 @@ namespace Project_FinchControl
                         break;
 
                     case "f":
+                        PersistenceSetThemeMenuScreen();
+                        break;
+
+
+                    case "g":
                         DisplayDisconnectFinchRobot(finchRobot);
                         break;
+
 
                     case "q":
                         DisplayDisconnectFinchRobot(finchRobot);
@@ -135,6 +143,9 @@ namespace Project_FinchControl
 
             } while (!quitApplication);
         }
+
+
+
 
 
         #region TALENT SHOW
@@ -321,6 +332,7 @@ namespace Project_FinchControl
             DisplayMenuPrompt("Talent Show Menu");
         }
         #endregion
+
         #region DATA RECORDER
         static void DataRecorderDisplayMenuScreen(Finch finchRobot)
         {
@@ -370,7 +382,7 @@ namespace Project_FinchControl
                         break;
 
                     case "e":
-                        
+
                         break;
 
                     case "q":
@@ -387,7 +399,7 @@ namespace Project_FinchControl
             } while (!quitMenu);
         }
 
-        
+
 
         static void DataRecorderDisplayGetData(double[] temperatures)
         {
@@ -415,20 +427,20 @@ namespace Project_FinchControl
 
             //Display table data
             //
-            
-            
+
+
             for (int index = 0; index < temperatures.Length; index++)
             {
                 Console.WriteLine(
                 (index + 1).ToString().PadLeft(15) +
                 temperatures[index].ToString("n2").PadLeft(15));
 
-                
-                
-                
+
+
+
             }
         }
-        
+
 
         static double[] DataRecorderDisplayGetData(int numberOfDataPoints, double dataPointFrequency, Finch finchRobot)
         {
@@ -459,7 +471,7 @@ namespace Project_FinchControl
             Console.WriteLine();
             DataRecorderDisplayTable(temperatures);
 
-                
+
 
 
             DisplayContinuePrompt();
@@ -474,7 +486,7 @@ namespace Project_FinchControl
         static double DataRecorderDisplayGetDataPointFrequency()
         {
             double dataPointFrequency;
-            
+
 
             DisplayScreenHeader("Data Point Frequency");
 
@@ -521,10 +533,10 @@ namespace Project_FinchControl
         /// *              Light Alarm Menu
         /// ***************************************************
         /// </summary>
-        
+
         static void LightAlarmDisplayMenuScreen(Finch finchRobot)
         {
-            
+
             Console.CursorVisible = true;
 
             bool quitMenu = false;
@@ -593,17 +605,17 @@ namespace Project_FinchControl
         }
 
         static void LightAlarmSetAlarm(
-            Finch finchRobot, 
-            string sensorsToMonitor, 
-            string rangeType, 
-            int minMaxThresholdValue, 
+            Finch finchRobot,
+            string sensorsToMonitor,
+            string rangeType,
+            int minMaxThresholdValue,
             int timeToMonitor)
         {
             int secondsElapsed = 0;
             bool thresholdExceeded = false;
             int currentLightSensorValue = 0;
 
-            
+
 
             DisplayScreenHeader("Set Alarm");
 
@@ -617,9 +629,9 @@ namespace Project_FinchControl
             Console.ReadKey();
             Console.WriteLine();
 
-            while ((secondsElapsed < timeToMonitor) && !thresholdExceeded) 
+            while ((secondsElapsed < timeToMonitor) && !thresholdExceeded)
             {
-               switch (sensorsToMonitor)
+                switch (sensorsToMonitor)
                 {
                     case "left":
                         currentLightSensorValue = finchRobot.getLeftLightSensor();
@@ -633,11 +645,11 @@ namespace Project_FinchControl
                         currentLightSensorValue = (finchRobot.getRightLightSensor() + finchRobot.getLeftLightSensor()) / 2;
                         break;
 
-                } 
+                }
 
-               switch (rangeType)
-               {    
-                    
+                switch (rangeType)
+                {
+
                     case "minimum":
                         if (currentLightSensorValue < minMaxThresholdValue)
                         {
@@ -651,12 +663,12 @@ namespace Project_FinchControl
                             thresholdExceeded = true;
                         }
                         break;
-                    
-               }
+
+                }
 
                 finchRobot.wait(1000);
                 secondsElapsed++;
-                
+
             }
 
             if (thresholdExceeded)
@@ -681,7 +693,7 @@ namespace Project_FinchControl
 
             DisplayScreenHeader("Time to Monitor");
 
-            
+
             Console.Write("Time to Monitor");
             input = int.TryParse(Console.ReadLine(), out timeToMonitor);
 
@@ -691,7 +703,7 @@ namespace Project_FinchControl
                 int.TryParse(Console.ReadLine(), out timeToMonitor);
 
             }
-            
+
 
             DisplayMenuPrompt("Light Alarm");
 
@@ -707,7 +719,7 @@ namespace Project_FinchControl
             Console.WriteLine($"Left light sensor ambient value: {finchRobot.getLeftLightSensor()}");
             Console.WriteLine($"Right light sensor ambient value: {finchRobot.getRightLightSensor()}");
             Console.WriteLine();
-            
+
             //validate
             Console.Write("Enter the {} light sensor value:");
             input = int.TryParse(Console.ReadLine(), out minMaxThresholdValue);
@@ -715,9 +727,9 @@ namespace Project_FinchControl
             {
                 Console.WriteLine("enter light sensor value.");
                 int.TryParse(Console.ReadLine(), out minMaxThresholdValue);
-                
+
             }
-            
+
             //echo
 
             DisplayMenuPrompt("Light Alarm");
@@ -733,15 +745,15 @@ namespace Project_FinchControl
 
             Console.Write("Sensors to monitor [left, right, both]");
             sensorsToMonitor = Console.ReadLine();
-            
+
             if (sensorsToMonitor != "left" && sensorsToMonitor != "right" && sensorsToMonitor != "both")
             {
                 Console.WriteLine("invalid sensors to monitor, please enter left or right or both.");
                 Console.ReadLine();
-                
+
             }
-            
-           
+
+
             DisplayMenuPrompt("Light Alarm");
 
             return sensorsToMonitor;
@@ -830,12 +842,12 @@ namespace Project_FinchControl
                     case "d":
                         UserProgrammingDisplayExecuteFinchCommands(finchRobot, commands, commandParameters);
                         break;
-                    
+
                     case "q":
                         quitMenu = true;
                         break;
 
-                   
+
                     default:
                         Console.WriteLine();
                         Console.WriteLine("\tPlease enter a letter for the menu choice.");
@@ -978,7 +990,7 @@ namespace Project_FinchControl
             {
                 Console.WriteLine($"- {commandName.ToLower()}  -");
                 if (commandCount % 5 == 0) Console.Write("-\n\t-");
-                commandCount++;  
+                commandCount++;
             }
             Console.WriteLine();
 
@@ -986,7 +998,7 @@ namespace Project_FinchControl
             {
                 Console.Write("\tEnter Command:");
 
-                if(Enum.TryParse(Console.ReadLine().ToUpper(), out command))
+                if (Enum.TryParse(Console.ReadLine().ToUpper(), out command))
                 {
                     commands.Add(command);
 
@@ -1022,11 +1034,11 @@ namespace Project_FinchControl
             GetValidInteger("\tEnter Motor Speed [1 - 255]:", 1, 255, out commandParameters.motorSpeed);
             GetValidIntegers("\tEnter LED Brightness [1 - 255]:", 1, 255, out commandParameters.ledBrightness);
             GetValidDouble("\tEnter wait in seconds:", 0, 10, out commandParameters.waitSeconds);
-            
-           
-            
-            
-            
+
+
+
+
+
             Console.WriteLine();
             Console.WriteLine($"\tMotor Speed: {commandParameters.motorSpeed}");
             Console.WriteLine($"\tLED Brightness: {commandParameters.ledBrightness}");
@@ -1041,7 +1053,7 @@ namespace Project_FinchControl
 
         private static void GetValidDouble(string v1, int v2, int v3, out double waitSeconds)
         {
-            
+
             Console.WriteLine("Enter wait in seconds [1-10]:");
             waitSeconds = Convert.ToDouble(Console.ReadLine());
             if (waitSeconds < 1 || waitSeconds > 10)
@@ -1053,7 +1065,7 @@ namespace Project_FinchControl
             DisplayContinuePrompt();
         }
 
-       
+
         private static void GetValidIntegers(string v1, int v2, int v3, out int ledBrightness)
         {
             Console.WriteLine("Enter LED Brightness [1-255]:");
@@ -1068,10 +1080,10 @@ namespace Project_FinchControl
             DisplayContinuePrompt();
         }
 
-        
+
         private static void GetValidInteger(string v1, int v2, int v3, out int motorSpeed)
         {
-            
+
             Console.WriteLine("Enter motor speed [1-255]:");
             motorSpeed = Convert.ToInt32(Console.ReadLine());
 
@@ -1083,11 +1095,128 @@ namespace Project_FinchControl
 
             DisplayContinuePrompt();
 
-           
+
         }
 
 
 
+
+
+        #endregion
+
+        #region PERSISTENCE
+        
+
+        
+
+        static void PersistenceSetThemeMenuScreen()
+        {
+            DisplaySetTheme();
+
+        }
+
+        static void DisplaySetTheme()
+        {
+            (ConsoleColor foregroundColor, ConsoleColor backgroundColor) themeColors;
+            bool themeChosen = false;
+
+
+            //set current theme from data
+
+
+            themeColors = ReadThemeData();
+            Console.ForegroundColor = themeColors.foregroundColor;
+            Console.BackgroundColor = themeColors.backgroundColor;
+            Console.Clear();
+            DisplayScreenHeader("Set Application Theme");
+
+            Console.WriteLine($"\tCurrent foreground color: {Console.ForegroundColor}");
+            Console.WriteLine($"\tCurrent background color: {Console.BackgroundColor}");
+
+            Console.Write("\tWould you like to change the current theme [ yes or no ]?");
+            if (Console.ReadLine().ToLower() == "yes")
+            {
+                do
+                {
+                    themeColors.foregroundColor = GetConsoleColorFromUser("foreground");
+                    themeColors.backgroundColor = GetConsoleColorFromUser("background");
+
+                    //set new theme
+                    Console.ForegroundColor = themeColors.foregroundColor;
+                    Console.BackgroundColor = themeColors.backgroundColor;
+                    Console.Clear();
+                    DisplayScreenHeader("Set Application Theme");
+                    Console.WriteLine($"\tNew foreground color: {Console.ForegroundColor}");
+                    Console.WriteLine($"\tNew background color: {Console.BackgroundColor}");
+
+                    Console.WriteLine();
+                    Console.Write("\tIs this the theme you would like?");
+                    if (Console.ReadLine().ToLower() == "yes")
+                    {
+                        themeChosen = true;
+                        WriteThemeData(themeColors.foregroundColor, themeColors.backgroundColor);
+
+                    }
+                } while (!themeChosen);
+            }
+            DisplayContinuePrompt();
+        }
+        
+            
+
+
+            static ConsoleColor GetConsoleColorFromUser(string property)
+            {
+                ConsoleColor consoleColor;
+                bool validConsoleColor;
+
+                do
+                {
+                    Console.Write($"\tEnter a value for the {property}:");
+                    validConsoleColor = Enum.TryParse<ConsoleColor>(Console.ReadLine(), true, out consoleColor);
+
+                    if (!validConsoleColor)
+                    {
+                        Console.WriteLine("\n\t**Invalid console color. Please try again.**\n");
+                    }
+                    else
+                    {
+                        validConsoleColor = true;
+
+                    }
+                } while (!validConsoleColor);
+
+                return consoleColor;
+            }
+
+            static (ConsoleColor foregroundColor, ConsoleColor backgroundColor) ReadThemeData()
+            {
+                string dataPath = @"Data/Theme.txt";
+                string[] themeColors;
+
+                ConsoleColor foregroundColor;
+                ConsoleColor backgroundColor;
+
+                themeColors = File.ReadAllLines(dataPath);
+
+                Enum.TryParse(themeColors[0], true, out foregroundColor);
+                Enum.TryParse(themeColors[1], true, out backgroundColor);
+
+                return (foregroundColor, backgroundColor);
+
+            }
+
+            static void WriteThemeData(ConsoleColor foreground, ConsoleColor background)
+            {
+                string dataPath = @"Data/Theme.txt";
+
+                File.WriteAllText(dataPath, foreground.ToString() + "\n");
+                File.AppendAllText(dataPath, background.ToString());
+            }
+
+        
+
+    
 
 
         #endregion
